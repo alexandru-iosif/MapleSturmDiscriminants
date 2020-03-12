@@ -29,7 +29,6 @@ if n >= 0 then
       for i from 2 to n do
       	  ci := -rem(c[i-1],c[i],x);
       	  c := [op(c),ci];
-	  print(i);
       end do;
    end if;
 end if;
@@ -48,7 +47,6 @@ for t in variablesf do
     if numelems(gensJt) > 1 then
        return "Error: One of the elimination ideals is not principal. Please use another method to compute the discriminant.";
     end if;
-    print(t,degree(op(gensJt),t));
     StSeq := {op(SD),op(SturmSequence(op(gensJt),t))};
     SD := numer(StSeq) union denom(StSeq);
 end do;
