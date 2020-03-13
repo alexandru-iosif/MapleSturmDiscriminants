@@ -13,7 +13,7 @@ option package;
 
 
 #####
-export SturmSequence, SturmDiscriminant, MonomialExponent, areAlgebraicallyIndependent;
+export SturmSequence, SturmDiscriminant, MonomialExponent, areAlgebraicallyIndependent, GenericPolynomial;
 
 
 #####Main Functions:
@@ -39,18 +39,31 @@ end proc;
 
 SturmDiscriminant;
 SturmDiscriminant := proc(J,variablesf)
-local c, t, Jt, parametersf, gensJt, SD, StSeq;
+local c, t, Jt, parametersf, gensJt, SD, SDt, StSeq, coeffJt, p, d, i;
 parametersf := IdealInfo[Variables](J) minus variablesf;
 c := [];
 SD := [];
 for t in variablesf do
+    print(t);
     Jt := EliminationIdeal(J,{op(parametersf),t});
     gensJt := IdealInfo[Generators](Jt);
     if numelems(gensJt) > 1 then
        return "Error: One of the elimination ideals is not principal. Please use another method to compute the discriminant.";
     end if;
-    StSeq := {op(SD),op(SturmSequence(op(gensJt),t))};
-    SD := numer(StSeq) union denom(StSeq);
+    coeffJt := {coeffs(op(gensJt),t)};
+    d := degree(op(gensJt),t);
+    if areAlgebraicallyIndependent(coeffJt,parametersf) = true and d + 1 = numelems(coeffJt) then
+       print(1);
+       p := GenericPolynomial(d,t);
+       StSeq := {op(SturmSequence(p,t))};
+       StSeq := subs({seq({coeffs(p,t)}[i] = coeffJt[i],i=1..d+1)},StSeq);
+       print(StSeq);
+    else
+       StSeq := {op(SD),op(SturmSequence(op(gensJt),t))};
+    end if;
+    SDt := {seq(coeffs(numer(StSeq)[i],t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
+    SD := {op(SD),op(SDt)};
+    print(2);
 end do;
 return SD;
 end proc;
@@ -88,6 +101,13 @@ end do;
 return false;
 end proc;
 
+GenericPolynomial;
+GenericPolynomial := proc(n,x)
+local p, a, i;
+a = {seq(a[i],i=0..n)};
+p := sum(a[i]*x^i,i=0..n);
+return p;
+end proc;
 
 end module; # SturmDiscriminants
 
