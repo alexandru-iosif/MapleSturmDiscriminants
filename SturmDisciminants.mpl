@@ -1,8 +1,9 @@
 #####
-
-
 with(PolynomialIdeals):
 with(Groebner):
+with(Student[MultivariateCalculus]):
+with(Student[LinearAlgebra]):
+with(combinat):
 
 #####
 SturmDiscriminants := module()
@@ -11,7 +12,8 @@ description "Sturm Discriminants";
 option package;
 
 
-export SturmSequence, SturmDiscriminant, MonomialExponent;
+#####
+export SturmSequence, SturmDiscriminant, MonomialExponent, areAlgebraicallyIndependent;
 
 
 #####Main Functions:
@@ -71,7 +73,20 @@ end do;
 return exponentmu - [seq(2, i = 1 .. n)];
 end proc;
 
-#####Local Functions:
+areAlgebraicallyIndependent;
+areAlgebraicallyIndependent := proc(L,variablesL)
+local n,l;
+n := numelems(L);
+if n > numelems(variablesL) then
+   return false;
+end if;
+for l in chose([op(variablesL)],n) do
+    if Jacobian([op(L)],l) <> 0 then
+       return true;
+    end if;
+end do;
+return false;
+end proc;
 
 
 end module; # SturmDiscriminants
