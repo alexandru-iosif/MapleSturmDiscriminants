@@ -44,7 +44,6 @@ parametersf := IdealInfo[Variables](J) minus variablesf;
 c := [];
 SD := [];
 for t in variablesf do
-    print(t);
     Jt := EliminationIdeal(J,{op(parametersf),t});
     gensJt := IdealInfo[Generators](Jt);
     if numelems(gensJt) > 1 then
@@ -53,17 +52,19 @@ for t in variablesf do
     coeffJt := {coeffs(op(gensJt),t)};
     d := degree(op(gensJt),t);
     if areAlgebraicallyIndependent(coeffJt,parametersf) = true and d + 1 = numelems(coeffJt) then
-       print(1);
        p := GenericPolynomial(d,t);
        StSeq := {op(SturmSequence(p,t))};
-       StSeq := subs({seq({coeffs(p,t)}[i] = coeffJt[i],i=1..d+1)},StSeq);
-       print(StSeq);
+       SDt := {seq(coeffs(collect(numer(StSeq[i]),t,'distributed'),t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))} minus {1};
+       SDt := [[op(SDt)],[seq({coeffs(p,t)}[i] = coeffJt[i],i=1..d+1)]]
+#      The following is very slow. I comment it out;       
+#      StSeq := subs({seq({coeffs(p,t)}[i] = coeffJt[i],i=1..d+1)},StSeq);
     else
        StSeq := {op(SD),op(SturmSequence(op(gensJt),t))};
+       SDt := {seq(coeffs(collect(numer(StSeq)[i],t,'distributed'),t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
+       SDt := [[op(SDt)],[]];
     end if;
-    SDt := {seq(coeffs(numer(StSeq)[i],t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
-    SD := {op(SD),op(SDt)};
-    print(2);
+#    SDt := {seq(coeffs(numer(StSeq)[i],t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
+    SD := [op(SD),SDt];
 end do;
 return SD;
 end proc;
