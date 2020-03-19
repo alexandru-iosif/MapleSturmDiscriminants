@@ -63,7 +63,7 @@ for t in variablesf do
        SDt := {seq(coeffs(collect(numer(StSeq)[i],t,'distributed'),t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
        SDt := [[op(SDt)],[]];
     end if;
-#    SDt := {seq(coeffs(numer(StSeq)[i],t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
+    SDt := {seq(coeffs(numer(StSeq)[i],t),i=1..numelems(numer(StSeq)))}  union {seq(coeffs(denom(StSeq)[i],t),i=1..numelems(denom(StSeq)))};
     SD := [op(SD),SDt];
 end do;
 return SD;
