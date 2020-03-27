@@ -20,14 +20,6 @@
 # are algebraically independent (for otherwise we cannot use this
 # change of variables to compute the Sturm Discriminant).
 
-# Note: We can compute the sturm discriminant through the monomial
-# parameterization because monomials are monotonous functions in the
-# interior of the positive orthant. (This means that, if t1...td are
-# the parameters of the monomial parameterization, then multiple
-# values of some ti corresponds to multiple values of the original
-# variables.) For general rational parameterization this does not
-# work. A simple counter-example will appear soon in my paper.
-
 # For more information, please contact me.
 
 
